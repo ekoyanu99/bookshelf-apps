@@ -15,12 +15,15 @@ document.addEventListener(RENDER_EVENT, function () {
     const uncompletedBOOKList = document.getElementById('incompleteBookshelfList');
     uncompletedBOOKList.innerHTML = "";
 
+    const completedBOOKList = document.getElementById('completeBookshelfList');
+    completedBOOKList.innerHTML = "";
+
     for (const bookItem of books) {
         const bookElement = makeBook(bookItem);
-
-        if (!bookItem.isCompleted) {
+        if (!bookItem.isCompleted)
             uncompletedBOOKList.append(bookElement);
-        }
+        else
+            completedBOOKList.append(bookElement);
     }
 });
 
@@ -142,4 +145,33 @@ function findBook(bookId) {
         }
     }
     return null;
+}
+
+function removeTaskFromCompleted(bookId) {
+    const bookTarget = findBookIndex(bookId);
+
+    if (bookTarget === -1) return;
+
+    books.splice(bookTarget, 1);
+    document.dispatchEvent(new Event(RENDER_EVENT));
+}
+
+
+function undoTaskFromCompleted(bookId) {
+    const bookTarget = findBook(bookId);
+
+    if (bookTarget == null) return;
+
+    bookTarget.isCompleted = false;
+    document.dispatchEvent(new Event(RENDER_EVENT));
+}
+
+function findBookIndex(bookId) {
+    for (const index in books) {
+        if (books[index].id === bookId) {
+            return index;
+        }
+    }
+
+    return -1;
 }
