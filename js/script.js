@@ -93,7 +93,8 @@ function makeBook(bookObject) {
 
     if (bookObject.isCompleted) {
         const undoButton = document.createElement('button');
-        undoButton.classList.add('undo-button');
+        undoButton.classList.add('green');
+        undoButton.innerHTML = "Belum Selesai dibaca";
 
         undoButton.addEventListener('click', function () {
             undoTaskFromCompleted(bookObject.id);
@@ -101,6 +102,7 @@ function makeBook(bookObject) {
 
         const trashButton = document.createElement('button');
         trashButton.classList.add('red');
+        trashButton.innerHTML = "Hapus buku";
 
         trashButton.addEventListener('click', function () {
             removeTaskFromCompleted(bookObject.id);
@@ -114,14 +116,23 @@ function makeBook(bookObject) {
     } else {
         const checkButton = document.createElement('button');
         checkButton.classList.add('green');
+        checkButton.innerHTML = "Selesai dibaca";
 
         checkButton.addEventListener('click', function () {
             addTaskToCompleted(bookObject.id);
         });
 
+        const trashButton = document.createElement('button');
+        trashButton.classList.add('red');
+        trashButton.innerHTML = "Hapus buku";
+
+        trashButton.addEventListener('click', function () {
+            removeTaskFromCompleted(bookObject.id);
+        });
+
         const actionButton = document.createElement('div');
         actionButton.classList.add('action');
-        actionButton.append(checkButton);
+        actionButton.append(checkButton, trashButton);
 
         container.append(actionButton);
     }
