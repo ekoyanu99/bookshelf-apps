@@ -1,11 +1,4 @@
-/*
-{
-    id: string | number,
-    title: string,
-    author: string,
-    year: number,
-    isComplete: boolean,
-}*/
+//array kosong buku
 const books = [];
 const RENDER_EVENT = 'render-book';
 
@@ -34,6 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
         addBook();
     });
 
+    //cek storage
     if (isStorageExist()) {
         loadDataFromStorage();
     }
@@ -73,17 +67,7 @@ function generateBookObject(id, title, author, year, isCompleted) {
     }
 }
 
-// <!--      <article class="book_item">-->
-// <!--        <h3>Book Title</h3>-->
-// <!--        <p>Penulis: John Doe</p>-->
-// <!--        <p>Tahun: 2002</p>-->
-// <!--    -->
-// <!--        <div class="action">-->
-// <!--          <button class="green">Selesai dibaca</button>-->
-// <!--          <button class="red">Hapus buku</button>-->
-// <!--        </div>-->
-// <!--      </article>-->
-
+//fungsi menambahkan buku
 function makeBook(bookObject) {
     const textTittle = document.createElement('h3');
     textTittle.innerText = bookObject.title;
@@ -199,6 +183,7 @@ function findBookIndex(bookId) {
     return -1;
 }
 
+//fs untuk menyimpan data ke lokal storage dr array ke json 
 function saveData() {
     if (isStorageExist()) {
         const parsed = JSON.stringify(books);
@@ -210,7 +195,8 @@ function saveData() {
 const SAVED_EVENT = 'saved-book';
 const STORAGE_KEY = 'BOOK_APPS';
 
-function isStorageExist() /* boolean */ {
+//fs cek storage broswer
+function isStorageExist() {
     if (typeof (Storage) === undefined) {
         alert('Browser kamu tidak mendukung local storage');
         return false;
@@ -221,6 +207,7 @@ function isStorageExist() /* boolean */ {
 document.addEventListener(SAVED_EVENT, function () {
     console.log(localStorage.getItem(STORAGE_KEY));
 
+    //clear input form
     const inputBookTitle = document.getElementById('inputBookTitle');
     inputBookTitle.value = "";
 
@@ -235,6 +222,7 @@ document.addEventListener(SAVED_EVENT, function () {
 
 });
 
+//fungsi ekstrak json ke array
 function loadDataFromStorage() {
     const serializedData = localStorage.getItem(STORAGE_KEY);
     let data = JSON.parse(serializedData);
@@ -246,4 +234,27 @@ function loadDataFromStorage() {
     }
 
     document.dispatchEvent(new Event(RENDER_EVENT));
+}
+
+//fungsi search
+const searchSubmit = document.getElementById('searchSubmit');
+searchSubmit.addEventListener('click', function (event) {
+    event.preventDefault();
+    searchByTitle();
+});
+
+function searchByTitle() {
+    const searchBookTitle = document.querySelector('#searchBookTitle').value.toLowerCase();
+    const bookItem = document.querySelectorAll('.book_item');
+
+    bookItem.forEach((item) => {
+        const isiItem = item.firstChild.textContent.toLowerCase();
+
+        if (isiItem.indexOf(searchBookTitle) != -1) {
+            item.setAttribute('style', 'display: block;');
+        } else {
+            item.setAttribute('style', 'display: none !important;');
+        }
+    });
+
 }
