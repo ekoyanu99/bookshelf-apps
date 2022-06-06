@@ -40,9 +40,14 @@ function addBook() {
     const bookTitle = document.getElementById('inputBookTitle').value;
     const bookAuthor = document.getElementById('inputBookAuthor').value;
     const bookYear = document.getElementById('inputBookYear').value;
+    const readStatus = document.getElementById('inputBookIsComplete').checked;
+
+    if (readStatus != readStatus.checked) {
+        isCompleted = false;
+    }
 
     const generateID = generateId();
-    const bookObject = generateBookObject(generateID, bookTitle, bookAuthor, bookYear, false);
+    const bookObject = generateBookObject(generateID, bookTitle, bookAuthor, bookYear, readStatus);
     books.push(bookObject);
 
     document.dispatchEvent(new Event(RENDER_EVENT));
